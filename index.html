@@ -1,0 +1,173 @@
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
+<style>
+    body {
+        background-color: black;
+        margin: 0;
+    }
+</style>
+
+
+
+<div class="fixed text-white ml-2  select-none " style="position: absolute; bottom: 0; margin-bottom: 10%; margin-left:25% ; font-family:Audiowide, sans-serif; font-size: 30px;" ><span>Distance: </span><span id="distanceLBL">0</span></div>
+<div class="fixed text-white ml-2  select-none " style="position: absolute; bottom: 0; margin-bottom: 10%; margin-left:65% ; font-family:Audiowide, sans-serif; font-size: 30px;" ><span>Speed: </span><span id="speedLBL">0</span></div>
+
+<div>
+    <div>
+
+        <div style="margin-top: 10px">
+            <img src="logo.png" style="margin-left :35% " width="200" height="300" />
+            <img src="pic.png" style="margin-top: -120px; margin-left :50%" width="140" height="300" />
+        </div>
+        
+<div>
+
+    <div>
+        
+    </div>
+    
+</div>
+
+        
+    </div>
+    <div style="margin-top: 20px" >
+
+       
+        
+        <script>
+
+            var c = document.createElement("canvas")
+            var ctx = c.getContext("2d");
+            c.width = innerWidth-20;
+            c.height = 420;
+
+            console.log( c.height)
+            const distanceLBL = document.querySelector('#distanceLBL')
+            const speedLBL = document.querySelector('#speedLBL')
+
+            document.body.appendChild(c);
+            
+            var perm = [];
+            while(perm.length < 255){
+                while(perm.includes(val = Math.floor(Math.random()*255)));
+                perm.push(val);
+            }
+            
+            var lerp = (a,b,t) => a + (b-a) * (1-Math.cos(t*Math.PI))/2;
+            var noise = x=>{
+                 x= x * 0.01 % 255;
+                return lerp(perm[Math.floor(x)], perm[Math.ceil(x)], x- Math.floor(x))
+            }
+            
+            var player = new function(){
+                this.x = c.width/3;
+                this.y = 0;
+                this.ySpeed = 0;
+                this.rot = 0;
+                this.rSpeed= 0;
+            
+                this.img = new Image();
+                this.img.src = "moto.png";
+            
+                this.draw = function(){
+                    var p1 = c.height - noise(t + this.x) * 0.25;
+                    var p2 = c.height - noise(t+5 + this.x) * 0.25;
+            
+                    var grounded = 0;
+                    if(p1 - 15>this.y){
+                        this.ySpeed += 0.1;
+                    }else{
+                        this.ySpeed -= this.y - (p1-15);
+                        this.y = p1 - 15;
+                        grounded = 1;
+                    }
+            
+                    if(!playing || grounded && Math.abs(this.rot) > Math.PI * 0.5){
+                        
+                        var FinalDistance = distance
+                        playing = false;
+                        this.rSpeed = 5;
+                        k.ArrowUp = 1;
+                        this.x -= speed * 5;
+
+                        if (this.x < 10){
+                            
+                            this.x = 10                        
+                            t = 0;
+                            this.ySpeed = 0;
+                            this.rSpeed= 0;
+                            
+                         distanceLBL.innerHTML = FinalDistance+ 'm'
+                        }
+                    }
+            
+                    var angle = Math.atan2((p2-15) - this.y, (this.x+5) - this.x);
+                    this.y += this.ySpeed;
+            
+                    if(grounded && playing){
+                        this.rot -= (this.rot - angle)*0.5;
+                        this.rSpeed = this.rSpeed - (angle - this.rot);
+                    }
+            
+                    this.rSpeed += (k.ArrowLeft - k.ArrowRight) * 0.05;
+                    this.rot -= this.rSpeed*0.1;
+            
+                    if(this.rot > Math.PI) this.rot = -Math.PI;
+                    if(this.rot < -Math.PI) this.rot = Math.PI;
+            
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.rot);
+                    ctx.drawImage(this.img, -15, -15,30,30);
+                    ctx.restore();
+                }
+            }
+            
+            var t = 0
+            var speed= 0;
+            var playing = true;
+            
+            var k = {ArrowUp : 0, ArrowDown : 0, ArrowLeft : 0, ArrowRight : 0};
+            var distance;
+            function loop(){
+                speed -= (speed - (k.ArrowUp - k.ArrowDown)) * 0.01;
+                t += 10 * speed;
+
+                if(playing){
+
+                    distance = Math.floor(t/15)
+                     distanceLBL.innerHTML = distance + 'm'
+                     speedLBL.innerHTML = Math.floor( speed*100)+' km/h'
+                }
+                
+                
+                //background color
+                this.img = new Image();
+                this.img.src = "1996.jpg";
+                ctx.drawImage(this.img,0,0,innerWidth,600)            
+                ctx.fillStyle = "black";
+                ctx.beginPath();
+                ctx.moveTo(0,c.height);
+                for (let i = 0; i < c.width; i++){
+                    ctx.lineTo(i, c.height - noise(t + i) * 0.25)
+                }
+                ctx.lineTo(c.width, c.height);
+                ctx.fill();
+                
+                player.draw();
+                requestAnimationFrame(loop);
+                console.log('Speed - ',speed)
+            }
+            
+            onkeydown = d=> k[d.key] = 1;
+            onkeyup = d=> k[d.key] = 0;
+            
+            
+            loop();
+            </script>
+    </div>
+   
+    
+</div>
+
+<canvas></canvas>
