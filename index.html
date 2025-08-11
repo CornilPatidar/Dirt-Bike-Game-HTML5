@@ -36,6 +36,17 @@
         
         <script>
 
+            // Gameplay tuning configuration
+            const CONFIG = {
+                bikeSize: 60,                 // pixels (sprite render size)
+                speedMax: 0.5,                // max normalized speed (0..1)
+                speedAccel: 0.05,             // acceleration smoothing toward target
+                terrainSpeedMultiplier: 6,     // how fast the world scrolls per unit speed
+                rotationInput: 0.03,           // player rotation input strength
+                rotationDamping: 0.08,         // rotation damping applied each frame
+                gravity: 0.09                  // gravity applied while airborne
+            };
+
             var c = document.createElement("canvas")
             var ctx = c.getContext("2d");
             c.width = innerWidth-20;
@@ -70,15 +81,16 @@
                 this.img.src = "moto.png";
             
                 this.draw = function(){
+                    const half = CONFIG.bikeSize / 2;
                     var p1 = c.height - noise(t + this.x) * 0.25;
                     var p2 = c.height - noise(t+5 + this.x) * 0.25;
             
                     var grounded = 0;
-                    if(p1 - 15>this.y){
-                        this.ySpeed += 0.1;
+                    if(p1 - half > this.y){
+                        this.ySpeed += CONFIG.gravity;
                     }else{
-                        this.ySpeed -= this.y - (p1-15);
-                        this.y = p1 - 15;
+                        this.ySpeed -= this.y - (p1 - half);
+                        this.y = p1 - half;
                         grounded = 1;
                     }
             
@@ -101,7 +113,7 @@
                         }
                     }
             
-                    var angle = Math.atan2((p2-15) - this.y, (this.x+5) - this.x);
+                    var angle = Math.atan2((p2 - half) - this.y, (this.x + 5) - this.x);
                     this.y += this.ySpeed;
             
                     if(grounded && playing){
@@ -109,8 +121,8 @@
                         this.rSpeed = this.rSpeed - (angle - this.rot);
                     }
             
-                    this.rSpeed += (k.ArrowLeft - k.ArrowRight) * 0.05;
-                    this.rot -= this.rSpeed*0.1;
+                    this.rSpeed += (k.ArrowLeft - k.ArrowRight) * CONFIG.rotationInput;
+                    this.rot -= this.rSpeed * CONFIG.rotationDamping;
             
                     if(this.rot > Math.PI) this.rot = -Math.PI;
                     if(this.rot < -Math.PI) this.rot = Math.PI;
@@ -118,7 +130,7 @@
                     ctx.save();
                     ctx.translate(this.x, this.y);
                     ctx.rotate(this.rot);
-                    ctx.drawImage(this.img, -15, -15,30,30);
+                    ctx.drawImage(this.img, -half, -half, CONFIG.bikeSize, CONFIG.bikeSize);
                     ctx.restore();
                 }
             }
@@ -130,14 +142,15 @@
             var k = {ArrowUp : 0, ArrowDown : 0, ArrowLeft : 0, ArrowRight : 0};
             var distance;
             function loop(){
-                speed -= (speed - (k.ArrowUp - k.ArrowDown)) * 0.01;
-                t += 10 * speed;
+                const targetSpeed = (k.ArrowUp - k.ArrowDown) * CONFIG.speedMax;
+                speed += (targetSpeed - speed) * CONFIG.speedAccel;
+                t += CONFIG.terrainSpeedMultiplier * speed;
 
                 if(playing){
 
                     distance = Math.floor(t/15)
                      distanceLBL.innerHTML = distance + 'm'
-                     speedLBL.innerHTML = Math.floor( speed*100)+' km/h'
+                     speedLBL.innerHTML = Math.floor(speed * 60)+' km/h'
                 }
                 
                 
@@ -159,8 +172,18 @@
                 console.log('Speed - ',speed)
             }
             
-            onkeydown = d=> k[d.key] = 1;
-            onkeyup = d=> k[d.key] = 0;
+            const keyMap = {
+                'ArrowUp': 'ArrowUp', 'w': 'ArrowUp', 'W': 'ArrowUp',
+                'ArrowDown': 'ArrowDown', 's': 'ArrowDown', 'S': 'ArrowDown',
+                'ArrowLeft': 'ArrowLeft', 'a': 'ArrowLeft', 'A': 'ArrowLeft',
+                'ArrowRight': 'ArrowRight', 'd': 'ArrowRight', 'D': 'ArrowRight'
+            };
+            onkeydown = d => {
+                if (keyMap[d.key]) { d.preventDefault(); k[keyMap[d.key]] = 1; }
+            };
+            onkeyup = d => {
+                if (keyMap[d.key]) { d.preventDefault(); k[keyMap[d.key]] = 0; }
+            };
             
             
             loop();
