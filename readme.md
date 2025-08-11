@@ -1,4 +1,4 @@
-## Dirt Bike Game — HTML5 Canvas 🏍️
+## 🏍️Dirt Bike Game — HTML5 Canvas 
 
 Tiny browser game made while I’m learning game dev and physics. It’s simple, a bit glitchy on purpose, and all about practice and iteration.
 
