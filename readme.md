@@ -1,56 +1,58 @@
-Dirt Bike Game (HTML5)
+## Dirt Bike Game — HTML5 Canvas
 
-A small browser game where you ride a dirt bike across simple terrain. Built with HTML5 Canvas and vanilla JavaScript as a weekend learning project.
+Lightweight, browser‑based dirt bike game built with HTML5 Canvas and vanilla JavaScript. Designed as a focused learning project with clean structure and quick start.
 
-How to Play
-- Arrow keys or WASD to move and balance
-  - Left/Right (A/D): accelerate/brake
-  - Up/Down (W/S): lean forward/back
-- R to restart if you crash
+![Gameplay preview](pic.png)
 
-Run Locally
-- Double‑click `index.html` to open it in your browser, or
-- Use a simple static server (e.g., VS Code “Live Server”).
+### Project Highlights
+- **Vanilla JS, no frameworks**: simple, readable code for quick review
+- **Canvas rendering at ~60 FPS**: game loop with `requestAnimationFrame`
+- **Light physics**: gravity, friction, rotation, and crash detection
+- **Instant restart**: fast iteration and player feedback
 
-What I Built
-- A basic side‑scrolling bike demo with:
-  - Simple physics: gravity, velocity, rotation, friction
-  - Keyboard input and a fixed game loop
-  - Canvas rendering for the bike sprite, ground, and UI
-  - Basic collision and crash/restart
+### Tech Stack
+- **Core**: HTML5 Canvas, JavaScript (ES6), minimal CSS
+- **Assets**: `moto.png`, `logo.png`, `pic.jpg`, `pic.png`, `1996.jpg`
 
-How I Built It
-- HTML5 Canvas for drawing the scene each frame
-- Vanilla JS `requestAnimationFrame` loop for ~60 FPS updates
-- Small physics model using position, velocity, angular rotation
-- Simple terrain and camera follow logic
+### Quick Start
+- Open `index.html` directly in a modern browser, or
+- Use a static server (e.g., VS Code “Live Server”) for auto‑reload
 
-Project Structure
-- `index.html`: all game markup, styles, and JavaScript
-- `moto.png`, `logo.png`, `pic.jpg`, `pic.png`, `1996.jpg`: art and background assets
+### Controls
+- **Left/Right** (or **A/D**): accelerate / brake
+- **Up/Down** (or **W/S**): lean forward / back
+- **R**: restart after a crash
 
-What I Learned
-- Structuring a basic game loop with delta time
-- Handling keyboard input cleanly and preventing default scroll
-- Applying lightweight physics and collision checks on Canvas
-- Asset loading and drawing performance tips
+### Architecture (Brief)
+- **Game loop**: `requestAnimationFrame` updates physics → renders frame
+- **Input**: keydown/keyup tracking for smooth control
+- **Physics**: position, velocity, rotation, friction, gravity
+- **Rendering**: Canvas 2D context draws bike, ground, UI
+- **Camera**: lightweight follow to keep the bike centered
 
-Help I Got (Resources)
-- MDN Web Docs for Canvas API and `requestAnimationFrame`
-  - [Canvas API on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
-  - [`requestAnimationFrame` on MDN](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
-- Stack Overflow threads for keydown/keyup handling and preventing arrow‑key scrolling
-- YouTube tutorials for canvas game patterns (game loop, camera follow)
-  - Search terms I used: “html5 canvas game loop”, “canvas platformer physics”
-- OpenGameArt.org and Photopea for quick sprite/background tweaks
+### What I Built
+- Side‑scrolling bike demo with basic collision and restart flow
+- Single‑file implementation in `index.html` for easy code reading
 
-Roadmap (If I Keep Going)
+### What I Learned
+- Building a reliable game loop and handling delta time
+- Clean keyboard input without interfering with page scrolling
+- Lightweight physics on Canvas with performance in mind
+
+### Resources and Help
+- **MDN Web Docs** for Canvas API and `requestAnimationFrame`
+  - [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+  - [`requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
+- **Stack Overflow** for key handling patterns and preventing arrow‑key scroll
+- **YouTube tutorials** for camera follow and loop structure (search: “html5 canvas game loop”, “canvas platformer physics”)
+- **OpenGameArt.org** and **Photopea** for quick sprite/background tweaks
+
+### Roadmap
 - Mobile touch controls and on‑screen buttons
-- Better terrain generation and checkpoints
+- Improved terrain generation and checkpoints
 - Sound effects and simple music toggle
 - Score, timer, and level progression
 
-Notes
-- This is intentionally simple and focused on learning. Code is kept minimal and in one file for clarity.
+— Personal learning project; feel free to explore and adapt.
 
 
