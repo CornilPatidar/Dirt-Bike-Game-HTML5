@@ -4,6 +4,9 @@ Lightweight, browser‑based dirt bike game built with HTML5 Canvas and vanilla 
 
 ![Gameplay preview](pic.png)
 
+### Play Online
+- Play instantly on itch.io: [Dirt Bike Game](https://cornil.itch.io/dirt-bike-game)
+
 ### Project Highlights
 - **Vanilla JS, no frameworks**: simple, readable code for quick review
 - **Canvas rendering at ~60 FPS**: game loop with `requestAnimationFrame`
@@ -22,6 +25,16 @@ Lightweight, browser‑based dirt bike game built with HTML5 Canvas and vanilla 
 - **Left/Right** (or **A/D**): accelerate / brake
 - **Up/Down** (or **W/S**): lean forward / back
 - **R**: restart after a crash
+
+### Test Checklist
+- Desktop browsers: Chrome, Edge, Firefox, Safari (latest)
+- Mobile: Chrome (Android), Safari (iOS)
+- Controls: Left/Right (A/D), Up/Down (W/S), R to restart
+- Physics feel: acceleration, braking, leaning, gravity, friction
+- Collisions: ground contact, crash detection, instant restart
+- Performance: steady ~60 FPS on typical hardware
+- UX: prevent page scroll from arrow keys, responsive canvas sizing
+- Visuals: sprites load correctly; no stretching on resize
 
 ### Architecture (Brief)
 - **Game loop**: `requestAnimationFrame` updates physics → renders frame
