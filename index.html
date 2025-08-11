@@ -16,8 +16,8 @@
     <div>
 
         <div style="margin-top: 10px">
-            <img src="logo.png" style="margin-left :35% " width="200" height="300" />
-            <img src="pic.png" style="margin-top: -120px; margin-left :50%" width="140" height="300" />
+            <img src="logo.png" alt="Dirt Bike Game logo" style="margin-left :35% " width="200" height="300" />
+            <img src="pic.png" alt="Gameplay preview" style="margin-top: -120px; margin-left :50%" width="140" height="300" />
         </div>
         
 <div>
@@ -38,13 +38,14 @@
 
             // Gameplay tuning configuration
             const CONFIG = {
-                bikeSize: 60,                 // pixels (sprite render size)
-                speedMax: 0.5,                // max normalized speed (0..1)
-                speedAccel: 0.05,             // acceleration smoothing toward target
-                terrainSpeedMultiplier: 6,     // how fast the world scrolls per unit speed
-                rotationInput: 0.03,           // player rotation input strength
-                rotationDamping: 0.08,         // rotation damping applied each frame
-                gravity: 0.09                  // gravity applied while airborne
+                bikeSize: 80,                 // pixels (sprite render size)
+                speedMax: 0.35,               // max normalized speed (0..1)
+                speedAccel: 0.06,             // acceleration smoothing toward target
+                terrainSpeedMultiplier: 5,    // how fast the world scrolls per unit speed
+                rotationInput: 0.025,         // player rotation input strength
+                rotationDamping: 0.10,        // rotation damping applied each frame
+                rotationSpeedClamp: 1.2,      // clamp for angular velocity
+                gravity: 0.10                 // gravity applied while airborne
             };
 
             var c = document.createElement("canvas")
@@ -59,8 +60,11 @@
             document.body.appendChild(c);
             
             var perm = [];
-            while(perm.length < 255){
-                while(perm.includes(val = Math.floor(Math.random()*255)));
+            while (perm.length < 255) {
+                let val;
+                do {
+                    val = Math.floor(Math.random() * 255);
+                } while (perm.includes(val));
                 perm.push(val);
             }
             
@@ -122,6 +126,9 @@
                     }
             
                     this.rSpeed += (k.ArrowLeft - k.ArrowRight) * CONFIG.rotationInput;
+                    // clamp angular velocity for stability
+                    if (this.rSpeed > CONFIG.rotationSpeedClamp) this.rSpeed = CONFIG.rotationSpeedClamp;
+                    if (this.rSpeed < -CONFIG.rotationSpeedClamp) this.rSpeed = -CONFIG.rotationSpeedClamp;
                     this.rot -= this.rSpeed * CONFIG.rotationDamping;
             
                     if(this.rot > Math.PI) this.rot = -Math.PI;
